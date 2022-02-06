@@ -5,70 +5,96 @@ export default function Home() {
   const [value, setValue] = useState(null);
   const [img, setImg] = useState(null);
   const [loader, setLoader] = useState(false);
+  const [image, setImage] = useState(null);
+  const [createObjectURL, setCreateObjectURL] = useState(null);
 
-  const onImageChange = (event) => {
-    setValue(event.target.files[0]);
+  const uploadToClient = (event) => {
     if (event.target.files && event.target.files[0]) {
+      const i = event.target.files[0];
       setImg(URL.createObjectURL(event.target.files[0]));
+      setImage(i);
+      setCreateObjectURL(URL.createObjectURL(i));
     }
   };
 
-  const uploadFile = () => {
+  const uploadToServer = async (event) => {
     setLoader(true);
-    var FormData = require("form-data");
-    console.log("file", value)
-    var data = new FormData();
-    data.append("file", value);
-
-    var config = {
-      method: "post",
-      url: "https://nftwatermark-back.herokuapp.com/api/uploadfile",
-      data: data,
-    };
-
-    axios(config)
-      .then(function (response) {
-        setLoader(false);
-        console.log(response.data);
-      })
-      .catch(function (error) {
-        console.log(error);
-        setLoader(false);
+    const body = new FormData();
+    // console.log("file", image)
+    body.append("file", image);
+    if (image) {
+      const response = await fetch("/api/upload", {
+        method: "POST",
+        body,
       });
-  };
-
-  const onChangeHandler = async() => {
-    setLoader(true);
-    var FormData = require("form-data");
-    const formData = new FormData();
-    formData.append(value?.name, value);
-    const config = {
-      headers: { 'content-type': 'multipart/form-data' },
-      onUploadProgress: (event) => {
-        console.log(`Current progress:`, Math.round((event.loaded * 100) / event.total));
-      },
-    };
-
-    const response = await axios.post('/api/uploads', formData, config);
-    console.log('response', response.data);
+    }
     await setLoader(false);
+    await setImage(null);
+    await setImg(null);
   };
+
+  // const onImageChange = (event) => {
+  //   setValue(event.target.files[0]);
+  //   if (event.target.files && event.target.files[0]) {
+  //     setImg(URL.createObjectURL(event.target.files[0]));
+  //   }
+  // };
+
+  // const uploadFile = () => {
+  //   setLoader(true);
+  //   var FormData = require("form-data");
+  //   console.log("file", value)
+  //   var data = new FormData();
+  //   data.append("file", value);
+
+  //   var config = {
+  //     method: "post",
+  //     url: "https://nftwatermark-back.herokuapp.com/api/uploadfile",
+  //     data: data,
+  //   };
+
+  //   axios(config)
+  //     .then(function (response) {
+  //       setLoader(false);
+  //       console.log(response.data);
+  //     })
+  //     .catch(function (error) {
+  //       console.log(error);
+  //       setLoader(false);
+  //     });
+  // };
+
+  // const onChangeHandler = async() => {
+  //   setLoader(true);
+  //   var FormData = require("form-data");
+  //   const formData = new FormData();
+  //   formData.append(value?.name, value);
+  //   const config = {
+  //     headers: { 'content-type': 'multipart/form-data' },
+  //     onUploadProgress: (event) => {
+  //       console.log(`Current progress:`, Math.round((event.loaded * 100) / event.total));
+  //     },
+  //   };
+
+  //   const response = await axios.post('/api/uploads', formData, config);
+  //   console.log('response', response.data);
+  //   await setLoader(false);
+  // };
 
   return (
     <body className="bg-red-50">
       <section id="app">
-
         <div className="pt-10 md:py-16 lg:py-24 overflow-hidden">
           <div className="max-w-screen-xl mx-auto text-center px-4 sm:px-6 lg:px-8">
             <div className="max-w-3xl mx-auto lg:max-w-none">
               <div className="mt-6 sm:mt-5 sm:grid sm:grid-cols-1 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
                 <div className="mt-2 sm:mt-0 sm:col-span-2">
-                  <div className="text-center p-6">
+                  {/* <div className="text-center p-6">
                     <p className="text-base">
                       Fill in the fields and upload your file.
                     </p>
-                  </div>
-                  <div className="flex justify-between items-center flex-wrap lg:flex-nowrap text-left">
+                  </div> */}
+                  {/* <div className="flex justify-between items-center flex-wrap lg:flex-nowrap text-left">
                     <div className="xl:w-1/2 md:mr-4 lg:w-2/5 md:w-2/5 flex flex-col mb-6">
                       <label
                         htmlFor="FirstName"
@@ -103,8 +129,8 @@ export default function Home() {
                         placeholder
                       />
                     </div>
-                  </div>
-                  {value && (
+                  </div> */}
+                  {image && (
                     <div className="flex justify-center w-full">
                       <img src={img} className="w-52 h-52 rounded-md" alt="" />
                     </div>
@@ -128,7 +154,7 @@ export default function Home() {
                             </span> */}
                           <input
                             // onChange="files"
-                            onChange={(e) => onImageChange(e)}
+                            onChange={(e) => uploadToClient(e)}
                             type="file"
                             className="absolute top-0 bottom-0 right-0 left-0  cursor-pointer opacity-0 w-full"
                           />
@@ -152,7 +178,7 @@ export default function Home() {
                   <div className="flex justify-center items-center pt-10">
                     <button
                       // onClick={() => uploadFile()}
-                      onClick={() => onChangeHandler()}
+                      onClick={() => uploadToServer()}
                       className="bg-purple-700 hover:opacity-75 flex justify-center w-48 py-4 text-white rounded-md"
                     >
                       {loader ? (

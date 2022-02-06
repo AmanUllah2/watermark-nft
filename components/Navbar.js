@@ -15,7 +15,7 @@ export default function Navbar({ fixed }) {
               href="/"
             >
               
-            <img class="inline w-10" src="/solo_pony.png" alt="..."></img>
+            <img className="inline w-10" src="/solo_pony.png" alt="..."></img>
               Watermark NFT 
             </a>
             <button
@@ -23,7 +23,7 @@ export default function Navbar({ fixed }) {
               type="button"
               onClick={() => setNavbarOpen(!navbarOpen)}
             >
-              <img class="inline w-5" src="/hamb.png" alt=""></img>
+              <img className="inline w-5" src="/hamb.png" alt=""></img>
             </button>
           </div>
           <div
@@ -39,7 +39,7 @@ export default function Navbar({ fixed }) {
                   className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-white hover:opacity-75"
                   href="https://github.com/Danes99/watermark-nft"
                 >
-                    <img class="inline w-5" src="/github.png" alt=""></img>
+                    <img className="inline w-5" src="/github.png" alt=""></img>
                     <span className="ml-2">Github</span>
                 </a>
               </li>
@@ -48,7 +48,7 @@ export default function Navbar({ fixed }) {
                   className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-white hover:opacity-75"
                   href="https://github.com/Danes99/watermark-nft"
                 >
-                    <img class="inline w-5" src="/teleram.png" alt=""></img>
+                    <img className="inline w-5" src="/teleram.png" alt=""></img>
                     <span className="ml-2">Telegram</span>
                 </a>
               </li>

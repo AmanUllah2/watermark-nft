@@ -17,21 +17,21 @@ export default function Home() {
     }
   };
 
-  const uploadToServer = async (event) => {
-    setLoader(true);
-    const body = new FormData();
-    // console.log("file", image)
-    body.append("file", image);
-    if (image) {
-      const response = await fetch("/api/upload", {
-        method: "POST",
-        body,
-      });
-    }
-    await setLoader(false);
-    await setImage(null);
-    await setImg(null);
-  };
+  // const uploadToServer = async (event) => {
+  //   setLoader(true);
+  //   const body = new FormData();
+  //   // console.log("file", image)
+  //   body.append("file", image);
+  //   if (image) {
+  //     const response = await fetch("/api/upload", {
+  //       method: "POST",
+  //       body,
+  //     });
+  //   }
+  //   await setLoader(false);
+  //   await setImage(null);
+  //   await setImg(null);
+  // };
 
   // const onImageChange = (event) => {
   //   setValue(event.target.files[0]);
@@ -40,29 +40,31 @@ export default function Home() {
   //   }
   // };
 
-  // const uploadFile = () => {
-  //   setLoader(true);
-  //   var FormData = require("form-data");
-  //   console.log("file", value)
-  //   var data = new FormData();
-  //   data.append("file", value);
+  const uploadFile = () => {
+    setLoader(true);
+    var FormData = require("form-data");
+    console.log("file", image)
+    var data = new FormData();
+    data.append("file", image);
 
-  //   var config = {
-  //     method: "post",
-  //     url: "https://nftwatermark-back.herokuapp.com/api/uploadfile",
-  //     data: data,
-  //   };
+    var config = {
+      method: "post",
+      url: "/api/upload/index1",
+      data: data,
+    };
 
-  //   axios(config)
-  //     .then(function (response) {
-  //       setLoader(false);
-  //       console.log(response.data);
-  //     })
-  //     .catch(function (error) {
-  //       console.log(error);
-  //       setLoader(false);
-  //     });
-  // };
+    axios(config)
+      .then(function (response) {
+        setLoader(false);
+        setImg(null);
+        setImage(null);
+        console.log(response.data);
+      })
+      .catch(function (error) {
+        console.log(error);
+        setLoader(false);
+      });
+  };
 
   // const onChangeHandler = async() => {
   //   setLoader(true);
@@ -177,8 +179,8 @@ export default function Home() {
                   </div>
                   <div className="flex justify-center items-center pt-10">
                     <button
-                      // onClick={() => uploadFile()}
-                      onClick={() => uploadToServer()}
+                      onClick={() => uploadFile()}
+                      // onClick={() => uploadToServer()}
                       className="bg-purple-700 hover:opacity-75 flex justify-center w-48 py-4 text-white rounded-md"
                     >
                       {loader ? (

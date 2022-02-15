@@ -49,7 +49,7 @@ export default function Home() {
 
     var config = {
       method: "post",
-      url: "/api/upload/index1",
+      url: "/api/upload/index12",
       data: data,
     };
 
@@ -66,7 +66,7 @@ export default function Home() {
       });
   };
 
-  // const onChangeHandler = async() => {
+  // const onChangeHandler = async() => { 
   //   setLoader(true);
   //   var FormData = require("form-data");
   //   const formData = new FormData();

@@ -41,7 +41,8 @@ export default function Home() {
     setLoader(true);
     var FormData = require("form-data");
     const formData = new FormData();
-    formData.append(value?.name, value);
+    formData.append('file', value);
+    formData.append('upload_preset', 'my-uploads');
     const config = {
       headers: { 'content-type': 'multipart/form-data' },
       onUploadProgress: (event) => {
@@ -49,8 +50,11 @@ export default function Home() {
       },
     };
 
-    const response = await axios.post('/api/uploads', formData, config);
-    console.log('response', response.data);
+    const response = await fetch('https://api.cloudinary.com/v1_1/dipurqndj/image/upload', { method: 'POST', body: formData }).then((res)=>{
+      console.log("ersasd", res)
+    });
+    const result = await response;
+    console.log('Response', result);
     await setLoader(false);
   };
 
@@ -68,7 +72,7 @@ export default function Home() {
                       Fill in the fields and upload your file.
                     </p>
                   </div>
-                  <div className="flex justify-between items-center flex-wrap lg:flex-nowrap text-left">
+                  {/* <div className="flex justify-between items-center flex-wrap lg:flex-nowrap text-left">
                     <div className="xl:w-1/2 md:mr-4 lg:w-2/5 md:w-2/5 flex flex-col mb-6">
                       <label
                         htmlFor="FirstName"
@@ -103,7 +107,7 @@ export default function Home() {
                         placeholder
                       />
                     </div>
-                  </div>
+                  </div> */}
                   {value && (
                     <div className="flex justify-center w-full">
                       <img src={img} className="w-52 h-52 rounded-md" alt="" />

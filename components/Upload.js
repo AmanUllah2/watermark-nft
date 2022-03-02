@@ -1,10 +1,13 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function Home() {
   const [value, setValue] = useState(null);
   const [img, setImg] = useState(null);
   const [loader, setLoader] = useState(false);
+  const [url, setUrl] = useState("");
 
   const onImageChange = (event) => {
     setValue(event.target.files[0]);
@@ -16,7 +19,7 @@ export default function Home() {
   const uploadFile = () => {
     setLoader(true);
     var FormData = require("form-data");
-    console.log("file", value)
+    console.log("file", value);
     var data = new FormData();
     data.append("file", value);
 
@@ -29,39 +32,55 @@ export default function Home() {
     axios(config)
       .then(function (response) {
         setLoader(false);
+        toast("Image uploaded successfully!")
         console.log(response.data);
       })
       .catch(function (error) {
         console.log(error);
+        toast("Something went wrong!")
         setLoader(false);
       });
   };
 
-  const onChangeHandler = async() => {
+  const onChangeHandler = async () => {
     setLoader(true);
-    var FormData = require("form-data");
-    const formData = new FormData();
-    formData.append('file', value);
-    formData.append('upload_preset', 'my-uploads');
-    const config = {
-      headers: { 'content-type': 'multipart/form-data' },
-      onUploadProgress: (event) => {
-        console.log(`Current progress:`, Math.round((event.loaded * 100) / event.total));
-      },
-    };
+    // var FormData = require("form-data");
+    // const formData = new FormData();
+    // formData.append('file', value);
+    // formData.append('upload_preset', 'my-uploads');
+    // const config = {
+    //   headers: { 'content-type': 'multipart/form-data' },
+    //   onUploadProgress: (event) => {
+    //     console.log(`Current progress:`, Math.round((event.loaded * 100) / event.total));
+    //   },
+    // };
 
-    const response = await fetch('https://api.cloudinary.com/v1_1/dipurqndj/image/upload', { method: 'POST', body: formData }).then((res)=>{
-      console.log("ersasd", res)
-    });
-    const result = await response;
-    console.log('Response', result);
-    await setLoader(false);
+    // const response = await fetch('https://api.cloudinary.com/v1_1/dipurqndj/image/upload', { method: 'POST', body: formData }).then((res)=>{
+    //   console.log("ersasd", res)
+    // });
+    // const result = await response;
+    // console.log('Response', result);
+    // await setLoader(false);
+    const data = new FormData();
+    data.append("file", value);
+    data.append("upload_preset", "my-uploads");
+    data.append("cloud_name", "dipurqndj");
+    fetch("  https://api.cloudinary.com/v1_1/dipurqndj/image/upload", {
+      method: "post",
+      body: data,
+    })
+      .then((resp) => resp.json())
+      .then((data) => {
+        setUrl(data.url);
+        setLoader(false);
+      })
+      .catch((err) => console.log(err));
   };
 
   return (
     <body className="bg-red-50">
+      <ToastContainer />
       <section id="app">
-
         <div className="pt-10 md:py-16 lg:py-24 overflow-hidden">
           <div className="max-w-screen-xl mx-auto text-center px-4 sm:px-6 lg:px-8">
             <div className="max-w-3xl mx-auto lg:max-w-none">
@@ -110,7 +129,7 @@ export default function Home() {
                   </div> */}
                   {value && (
                     <div className="flex justify-center w-full">
-                      <img src={img} className="w-52 h-52 rounded-md" alt="" />
+                      {url === "" ? <img src={img} className="w-52 h-52 rounded-md" alt="" /> : url }
                     </div>
                   )}
                   <div className="w-full flex justify-center items-center px-6 pt-5 pb-6 border-2 border-gray-300 ok relative mt-7 flex-col py-10 text-blue tracking-wide uppercase cursor-pointer border-dashed rounded-md min-h-128">

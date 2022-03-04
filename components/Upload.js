@@ -64,8 +64,8 @@ export default function Home() {
     const data = new FormData();
     data.append("file", value);
     data.append("upload_preset", "my-uploads");
-    data.append("cloud_name", "dipurqndj");
-    fetch("  https://api.cloudinary.com/v1_1/dipurqndj/image/upload", {
+    data.append("cloud_name", "dzttg2nke");
+    fetch("https://api.cloudinary.com/v1_1/dzttg2nke/image/upload", {
       method: "post",
       body: data,
     })
